@@ -1,0 +1,6 @@
+a = str(input()).split(' ')
+a, b = [int(item) for item in a], []
+while len(a) > 0:
+    b.append(min(a))
+    a.pop(a.index(min(a)))
+print(*b) 
