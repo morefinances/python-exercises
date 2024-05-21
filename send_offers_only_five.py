@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jan 21 16:50:35 2024
-
-@author: The Financier
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Wed Dec 20 16:48:36 2023
 
 @author: S.Stycenkov
@@ -15,6 +8,7 @@ import pandas as pd
 from tkinter import *  
 from tkinter.ttk import Combobox  
 from time import sleep
+import datetime as dtm
 
 none_str = ['' , '' ]
 
@@ -40,6 +34,8 @@ def save_orders():
             C.append(size[u].get())
             D.append(combo[u].get())
             total_id += 1
+            # if total_id == 2:
+            #     total_id = 5
     df=pd.DataFrame({
         'id': A,
         'direct': B,
@@ -50,7 +46,8 @@ def save_orders():
     df.to_csv("C:/files/offers.csv", sep=" ", index = False, header = False)
     df.to_csv("C:/files/historyoffers.csv", mode='a', sep=" ", index = False, header = False)
     sleep(1/10)
-    print('-' * 20)
+    print('-' * 30)
+    print(dtm.datetime.now())
     
 def id_clear():
     global total_id
@@ -74,6 +71,7 @@ def send_five_orders():
         C.append(size[i].get())
         D.append(combo[i].get())
         total_id += 1
+
         
     df=pd.DataFrame({
         'id': A,
@@ -93,15 +91,24 @@ total_id = 1
 # считываем тикеры
 file = "C:\\files\\tickers_for_work.csv"
 offers = pd.read_csv(file, delimiter=';')
-print(offers)
+
+#print(offers)
 
 uniq_offers = [none_str[0]]
 directions = ['Buy', 'Sell', none_str[1]]
 
 # удаляем дублирование тикеров
 for i in range(len(offers.columns)):
-    if "." not in offers.columns[i]:
+    if "." not in offers.columns[i] and "Unnamed" not in offers.columns[i]:
         uniq_offers.append(offers.columns[i])
+
+total_len = 0
+for ii in range(1, len(uniq_offers)):
+    total_len += len(uniq_offers[ii]) + 3
+print('- ' * int(total_len/2))
+print('tickers_for_work:')
+print(*uniq_offers[1:], sep=" | ")
+print('- ' * int(total_len/2))
 
 # создаем панель выставления заявок  
 window = Tk()  
